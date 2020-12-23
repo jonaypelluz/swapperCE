@@ -1,14 +1,19 @@
 { 
   "name" : "Chrome-Extension: SwapperCE",
   "version" : "0.1",
-  "permissions": ["activeTab", "storage", "webRequest", "webRequestBlocking", "<all_urls>"],
+  "permissions": ["activeTab", "storage", "webRequest", "webRequestBlocking", "background", "<all_urls>"],
   "content_scripts": [{
     "matches": ["<all_urls>"],
     "all_frames": true,
-    "js":      ["swap.js"]
+    "js": ["swap.js"]
   }],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "urls.js",
+      "strings.js",
+      "replacements.js",
+      "background.js"
+    ],
     "persistent": true
   },
   "browser_action": {

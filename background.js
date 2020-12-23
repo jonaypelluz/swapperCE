@@ -1,31 +1,9 @@
+'use strict';
+
 const log = function(...args) {
     console.log(...args);
     chrome.extension.getBackgroundPage().console.log(...args);
 };
-
-const arrayOfUrls = {
-    urls: ["*://*.badoink.com/content/*"]
-};
-
-const strings = [
-    'blowjob',
-    'porn',
-    'PORN',
-    'Fuck',
-    'Fucks',
-    'fuckable',
-    'dirty',
-];
-
-const replacements = [
-    'blowpipe',
-    'yoga',
-    'YOGA',
-    'Save',
-    'Saves',
-    'beautiful',
-    'nice',
-];
 
 function changeImageUrls(details) {
     if(details.url.includes('.svg') === false){
@@ -72,10 +50,10 @@ chrome.webRequest.onBeforeRequest.addListener(
 );
 
 chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
-    if(message.msg === "paragraph"){
-        senderResponse({strings: strings, replacements: replacements, index: message.index});
+    if (message.msg === "paragraph") {
+        senderResponse({ strings: strings, replacements: replacements, index: message.index });
     }
-    if(message.msg === "swap") {
+    if (message.msg === "swap") {
         chrome.webRequest.onBeforeRequest.removeListener(changeImageUrls);
         chrome.webRequest.onBeforeRequest.addListener(
             doNotChangeImageUrls,
@@ -83,8 +61,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
             ["blocking"]
         );
         chrome.webRequest.handlerBehaviorChanged();
-        senderResponse({response: 'ok'});
-    } else if (message.msg === "show") {
+        senderResponse({ response: 'ok' });
+    } else if (message.msg === "noswap") {
         chrome.webRequest.onBeforeRequest.removeListener(doNotChangeImageUrls);
         chrome.webRequest.onBeforeRequest.addListener(
             changeImageUrls,
@@ -92,7 +70,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
             ["blocking"]
         );
         chrome.webRequest.handlerBehaviorChanged();
-        senderResponse({response: 'ok'});
+        senderResponse({ response: 'ok' });
     }
     return true;  // Will respond asynchronously.
 });
